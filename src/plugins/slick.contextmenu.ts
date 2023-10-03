@@ -156,11 +156,11 @@ export class SlickContextMenu implements SlickPlugin {
   // --
   // public API
   pluginName = 'ContextMenu' as const;
-  onAfterMenuShow = new SlickEvent<MenuFromCellCallbackArgs>();
-  onBeforeMenuShow = new SlickEvent<MenuFromCellCallbackArgs>();
-  onBeforeMenuClose = new SlickEvent<MenuFromCellCallbackArgs>();
-  onCommand = new SlickEvent<MenuCommandItemCallbackArgs>();
-  onOptionSelected = new SlickEvent<MenuOptionItemCallbackArgs>();
+  onAfterMenuShow = new SlickEvent<MenuFromCellCallbackArgs>('onAfterMenuShow');
+  onBeforeMenuShow = new SlickEvent<MenuFromCellCallbackArgs>('onBeforeMenuShow');
+  onBeforeMenuClose = new SlickEvent<MenuFromCellCallbackArgs>('onBeforeMenuClose');
+  onCommand = new SlickEvent<MenuCommandItemCallbackArgs>('onCommand');
+  onOptionSelected = new SlickEvent<MenuOptionItemCallbackArgs>('onOptionSelected');
 
   // --
   // protected props

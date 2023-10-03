@@ -20,7 +20,7 @@ export class SlickCellSelectionModel {
   // --
   // public API
   pluginName = 'CellSelectionModel' as const;
-  onSelectedRangesChanged = new SlickEvent<CellRange[]>();
+  onSelectedRangesChanged = new SlickEvent<CellRange[]>('onSelectedRangesChanged');
 
   // --
   // protected props
