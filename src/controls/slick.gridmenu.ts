@@ -176,7 +176,7 @@ export class SlickGridMenu {
 
   init(grid: SlickGrid) {
     this._gridOptions = grid.getOptions();
-    Utils.addSlickEventDispatchWhenDefined(this._gridOptions, this);
+    Utils.addSlickEventDispatchWhenDefined(grid.getContainerNode(), this);
     this.createGridMenu();
 
     // subscribe to the grid, when it's destroyed, we should also destroy the Grid Menu
