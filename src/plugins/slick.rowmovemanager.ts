@@ -9,7 +9,6 @@ const Utils = IIFE_ONLY ? Slick.Utils : Utils_;
 
 /**
  * Row Move Manager options:
- *    containerCssClass:        A CSS class to be added to the cell container.
  *    cssClass:                 A CSS class to be added to the div of the cell formatter.
  *    columnId:                 Column definition id (defaults to "_move")
  *    cancelEditOnDrag:         Do we want to cancel any Editing while dragging a row (defaults to false)

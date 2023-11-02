@@ -113,7 +113,7 @@ const Resizable = IIFE_ONLY ? Slick.Resizable : Resizable_;
  * Distributed under MIT license.
  * All rights reserved.
  *
- * SlickGrid v5.3.1
+ * SlickGrid v5.4.2
  *
  * NOTES:
  *     Cell/row DOM manipulations are done directly bypassing JS DOM manipulation methods.
@@ -135,7 +135,7 @@ interface RowCaching {
 export class SlickGrid<TData = any, C extends Column<TData> = Column<TData>, O extends BaseGridOption<C> = BaseGridOption<C>> {
   //////////////////////////////////////////////////////////////////////////////////////////////
   // Public API
-  slickGridVersion = '5.3.1';
+  slickGridVersion = '5.4.2';
 
   /** optional grid state clientId */
   cid = '';
@@ -843,6 +843,7 @@ export class SlickGrid<TData = any, C extends Column<TData> = Column<TData>, O e
         this.slickDraggableInstance = Draggable({
           containerElement: this._container,
           allowDragFrom: 'div.slick-cell',
+          allowDragFromClosest: 'div.slick-cell',
           onDragInit: this.handleDragInit.bind(this),
           onDragStart: this.handleDragStart.bind(this),
           onDrag: this.handleDrag.bind(this),
@@ -2329,17 +2330,24 @@ export class SlickGrid<TData = any, C extends Column<TData> = Column<TData>, O e
     this._style = document.createElement('style');
     this._style.nonce = this._options.nonce || '';
     (this._options.shadowRoot || document.head).appendChild(this._style);
+
+    const rowHeight = (this._options.rowHeight! - this.cellHeightDiff);
+    const rules = [
+      `.${this.uid} .slick-group-header-column { left: 1000px; }`,
+      `.${this.uid} .slick-header-column { left: 1000px; }`,
+      `.${this.uid} .slick-top-panel { height: ${this._options.topPanelHeight}px; }`,
+      `.${this.uid} .slick-preheader-panel { height: ${this._options.preHeaderPanelHeight}px; }`,
+      `.${this.uid} .slick-headerrow-columns { height: ${this._options.headerRowHeight}px; }`,
+      `.${this.uid} .slick-footerrow-columns { height: ${this._options.footerRowHeight}px; }`,
+      `.${this.uid} .slick-cell { height: ${rowHeight}px; }`,
+      `.${this.uid} .slick-row { height: ${this._options.rowHeight}px; }`,
+    ];
+
     const sheet = this._style.sheet;
     if (sheet) {
-      const rowHeight = (this._options.rowHeight! - this.cellHeightDiff);
-      sheet.insertRule(`.${this.uid} .slick-group-header-column { left: 1000px; }`);
-      sheet.insertRule(`.${this.uid} .slick-header-column { left: 1000px; }`);
-      sheet.insertRule(`.${this.uid} .slick-top-panel { height: ${this._options.topPanelHeight}px; }`);
-      sheet.insertRule(`.${this.uid} .slick-preheader-panel { height: ${this._options.preHeaderPanelHeight}px; }`);
-      sheet.insertRule(`.${this.uid} .slick-headerrow-columns { height: ${this._options.headerRowHeight}px; }`);
-      sheet.insertRule(`.${this.uid} .slick-footerrow-columns { height: ${this._options.footerRowHeight}px; }`);
-      sheet.insertRule(`.${this.uid} .slick-cell { height: ${rowHeight}px; }`);
-      sheet.insertRule(`.${this.uid} .slick-row { height: ${this._options.rowHeight}px; }`);
+      for (const rule of rules) {
+        sheet.insertRule(rule);
+      }
 
       for (let i = 0; i < this.columns.length; i++) {
         if (!this.columns[i] || this.columns[i].hidden) { continue; }
@@ -2347,6 +2355,30 @@ export class SlickGrid<TData = any, C extends Column<TData> = Column<TData>, O e
         sheet.insertRule(`.${this.uid} .l${i} { }`);
         sheet.insertRule(`.${this.uid} .r${i} { }`);
       }
+    } else {
+      // fallback in case the 1st approach doesn't work, let's use our previous way of creating the css rules which is what works in Salesforce :(
+      this.createCssRulesAlternative(rules);
+    }
+  }
+
+  /** Create CSS rules via template in case the first approach with createElement('style') doesn't work */
+  protected createCssRulesAlternative(rules: string[]) {
+    const template = document.createElement('template');
+    template.innerHTML = '<style type="text/css" rel="stylesheet" />';
+    this._style = template.content.firstChild as HTMLStyleElement;
+    (this._options.shadowRoot || document.head).appendChild(this._style);
+
+    for (let i = 0; i < this.columns.length; i++) {
+      if (!this.columns[i] || this.columns[i].hidden) { continue; }
+
+      rules.push(`.${this.uid} .l${i} { }`);
+      rules.push(`.${this.uid} .r${i} { }`);
+    }
+
+    if ((this._style as any).styleSheet) { // IE
+      (this._style as any).styleSheet.cssText = rules.join(' ');
+    } else {
+      this._style.appendChild(document.createTextNode(rules.join(' ')));
     }
   }
 
@@ -3458,6 +3490,12 @@ export class SlickGrid<TData = any, C extends Column<TData> = Column<TData>, O e
 
     if (this._options.enableAddRow !== args.enableAddRow) {
       this.invalidateRow(this.getDataLength());
+    }
+
+    // before applying column freeze, we need our viewports to be scrolled back to left to avoid misaligned column headers
+    if (args.frozenColumn) {
+      this.getViewports().forEach(vp => vp.scrollLeft = 0);
+      this.handleScroll(); // trigger scroll to realign column headers as well
     }
 
     const originalOptions = Utils.extend(true, {}, this._options);
