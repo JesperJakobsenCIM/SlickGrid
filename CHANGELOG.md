@@ -2,6 +2,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.4.2](https://github.com/6pac/SlickGrid/compare/5.4.1...5.4.2) (2023-11-02)
+
+### Bug Fixes
+
+* misaligned column headers after horizontal scroll then freeze ([#901](https://github.com/6pac/SlickGrid/issues/901)) ([7f11eff](https://github.com/6pac/SlickGrid/commit/7f11eff8b2b82c7541bb114d49f05be026fa60df))
+
+## [5.4.1](https://github.com/6pac/SlickGrid/compare/5.4.0...5.4.1) (2023-11-01)
+
+### Bug Fixes
+
+* add `allowDragFromClosest` to make `.slick-cell` or child draggable ([#897](https://github.com/6pac/SlickGrid/issues/897)) ([282fbb4](https://github.com/6pac/SlickGrid/commit/282fbb4ce1e6a16c236d3842dd7c1d2bfc4fa016))
+* create CSS rules by style element doesn't work in salesforce ([#900](https://github.com/6pac/SlickGrid/issues/900)) ([4548fa0](https://github.com/6pac/SlickGrid/commit/4548fa08f7627c90828913888d965153a6f6eeb2))
+* regression with RowMoveManager, row could no longer be moved ([#896](https://github.com/6pac/SlickGrid/issues/896)) ([02226bd](https://github.com/6pac/SlickGrid/commit/02226bd7746482c59554b096d536e257762536c3)), closes [#865](https://github.com/6pac/SlickGrid/issues/865)
+
+# [5.4.0](https://github.com/6pac/SlickGrid/compare/5.3.1...5.4.0) (2023-11-01)
+
+### Bug Fixes
+
+* dynamically create CSS rules via JS instead of innerHTML ([#883](https://github.com/6pac/SlickGrid/issues/883)) ([a08b0f8](https://github.com/6pac/SlickGrid/commit/a08b0f8f80ec1ce994dd71a3fde20fb85fdb2541)), closes [#878](https://github.com/6pac/SlickGrid/issues/878)
+* HeaderMenu `items` prop for sub-menus should be optional ([b5576de](https://github.com/6pac/SlickGrid/commit/b5576de70aabc1af154e88f29cf003288d0dfeb8))
+* replace a few innerHTML by more secure alternatives ([#885](https://github.com/6pac/SlickGrid/issues/885)) ([53ab293](https://github.com/6pac/SlickGrid/commit/53ab293e6fc862a2c4fa3729cb11f0b916b66bc2))
+* sub-menu event listeners leaking when closing sub-menus ([#888](https://github.com/6pac/SlickGrid/issues/888)) ([338ea2a](https://github.com/6pac/SlickGrid/commit/338ea2aa62337cba37e2e19cf9c6cac5fd884ccd))
+
 ## [5.3.1](https://github.com/6pac/SlickGrid/compare/5.3.0...5.3.1) (2023-10-25)
 
 ### Bug Fixes

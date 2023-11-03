@@ -10,7 +10,7 @@ import { BindingEventService as BindingEventService_, type SlickEditorLock, Slic
  * Distributed under MIT license.
  * All rights reserved.
  *
- * SlickGrid v5.3.1
+ * SlickGrid v5.4.2
  *
  * NOTES:
  *     Cell/row DOM manipulations are done directly bypassing JS DOM manipulation methods.
@@ -129,7 +129,7 @@ export declare class SlickGrid<TData = any, C extends Column<TData> = Column<TDa
     protected _topPanels: HTMLDivElement[];
     protected _viewport: HTMLDivElement[];
     protected _canvas: HTMLDivElement[];
-    protected _style: any;
+    protected _style?: HTMLStyleElement;
     protected _boundAncestors: HTMLElement[];
     protected stylesheet?: {
         cssRules: Array<{
@@ -410,6 +410,8 @@ export declare class SlickGrid<TData = any, C extends Column<TData> = Column<TDa
     protected setScroller(): void;
     protected measureCellPaddingAndBorder(): void;
     protected createCssRules(): void;
+    /** Create CSS rules via template in case the first approach with createElement('style') doesn't work */
+    protected createCssRulesAlternative(rules: string[]): void;
     protected getColumnCssRules(idx: number): {
         left: {
             selectorText: string;
